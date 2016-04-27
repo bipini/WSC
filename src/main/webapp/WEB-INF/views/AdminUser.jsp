@@ -41,7 +41,7 @@ xhttp.send();
 	    	if(jQuery.trim(inp).length > 0)
 	    	{	        
 	        $('#userName').attr('readonly', 'true'); // mark it as read only
-	        //$('#userName').blur(); 
+	        $('#userName').attr('disabled', 'true');
 	        $('#userName').css('background-color' , '#DEDEDE'); // change the background color
 	    	}
 	
