@@ -1,0 +1,142 @@
+package com.mindfire.wsc.controllers;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.mindfire.wsc.model.UserDTO;
+import com.mindfire.wsc.service.UserService;
+
+/**
+ * This class provides functionalities 
+ * for the admin to control users 
+ * @author sudhansub
+ *
+ */
+@Controller
+@RequestMapping(value = "admin/user")
+public class AdminUserController {
+
+	@Autowired
+	private UserService userService;
+
+	/*
+	 * This method is used to redirect the user to AdminUser.jsp
+	 */
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public ModelAndView addUser(ModelMap model) {
+		
+		return new ModelAndView("AdminUser");
+	}
+	
+	/*
+	 * This method is used to Edit/Modify the user using userid
+	 * here user id is taken as @PathVaribale, as parameter
+	 */
+	@RequestMapping(value = "/edit/{eno}", method = RequestMethod.GET)
+	public ModelAndView editUser(ModelMap model, @PathVariable("eno") int eno) {
+		if (eno >= 0) {
+			model.addAttribute("userdetail", userService.modifyUser(eno));
+		}
+
+		return new ModelAndView("AdminUser");
+	}
+	
+	/*
+	 * This method is used Save the new User to database
+	 */
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public ModelAndView saveUser(UserDTO user) {
+		if(user != null) {
+			userService.save(user);
+		}
+
+		return new ModelAndView("redirect:/admin");
+	}
+	
+	/*
+	 * This method is used delete the user from DB
+	 * Parameter used as user id.
+	 */
+	@RequestMapping(value = "/delete/{eno}", method = RequestMethod.GET)
+	public ModelAndView deleteUser(ModelMap model, @PathVariable("eno") int eno) {
+		if (eno >= 0) {
+			userService.deleteUser(eno);
+			model.addAttribute("User Deleted Successfully", "msg");
+		}
+
+		return new ModelAndView("redirect:/admin");
+	}
+	
+	/*
+	 * This method is used Check the user from DB
+	 * Parameter used as user id.
+	 */
+	@RequestMapping(value = "/checkUsername/{user}", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkUsername(HttpServletResponse response,@PathVariable("user") String user) {
+		boolean flag = false;
+		
+		response.setContentType("text/plain");
+	    response.setCharacterEncoding("UTF-8");    
+	    
+		if (user != null) {
+			flag = userService.checkUsername(user);			
+		}	
+		if(flag == true) {
+			return "User Already Exist";
+		} else {
+			return "Congratulations: "+user+" is Available";
+		}
+	}	
+	
+	/*
+	 * This method is used check the user from DB
+	 * Parameter used as user id.
+	 */
+	@RequestMapping(value = "/changepassword/{ename}", method = RequestMethod.GET)
+	public ModelAndView changeUserPassword(ModelMap model, @PathVariable("ename") String ename,HttpSession session) {
+		UserDTO sessionUser = (UserDTO) session.getAttribute("userSession");
+		UserDTO dtoUser = userService.getUserByUserName(ename);
+		
+		if((sessionUser.getUserName() != null)) {
+			if(sessionUser.getUserName().equals(dtoUser.getUserName())) {		
+				//return "ChangePwd";
+				return new ModelAndView("ChangePwd");		
+			}
+			else {
+				return new ModelAndView("redirect:/login");				
+			}	
+		}
+		else {
+			return new ModelAndView("redirect:/login");			
+		}		
+	}
+	
+	/*
+	 * This method is used Change the user Password from DB
+	 * Parameter used as user id.
+	 */
+	@RequestMapping(value = "/UpdateUserPassword", method = RequestMethod.POST)
+	public ModelAndView UpdateUserPassword(Model model,UserDTO user,HttpSession session) {		
+		UserDTO sessionUser = (UserDTO) session.getAttribute("userSession");
+		if(user.getExistingpwd().equals(sessionUser.getPassword()) && user.getPassword().equals(user.getConfpassword())) {
+			sessionUser.setPassword(user.getPassword());
+			userService.update(sessionUser);
+		} else {
+			model.addAttribute("msg", "Username and Password does not match , try again");
+			return new ModelAndView("redirect:changepassword/"+sessionUser.getUserName());
+		}	
+
+		return new ModelAndView("redirect:/login");
+	}	
+}

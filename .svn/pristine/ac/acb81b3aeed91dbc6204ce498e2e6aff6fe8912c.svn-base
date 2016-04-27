@@ -1,0 +1,44 @@
+/**
+ * 
+ */
+package com.mindfire.wsc.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mindfire.wsc.domain.User;
+import com.mindfire.wsc.model.UserDTO;
+import com.mindfire.wsc.repositories.UserRepository;
+
+/**
+ * @author sudhansub
+ *
+ */
+@Service
+public class UserService {
+	
+	@Autowired
+	UserRepository userRepo;
+	
+	/**
+	 * Provides a single user by user name fetched from DB
+	 * @param userName
+	 * @return
+	 */
+	public UserDTO getUserByUserName(String userName){
+		return convetUserDomainToUserDTO(userRepo.findByUserName(userName));
+	}
+	
+	private UserDTO convetUserDomainToUserDTO(User user){
+		UserDTO userDto = new UserDTO();
+		
+		userDto.setUserId(user.getUserId());
+		userDto.setUserName(user.getUserName());
+		userDto.setPassword(user.getPassword());
+		userDto.setEmail(user.getEmail());
+		userDto.setRole(user.getUserRole());
+		
+		return userDto;
+	}
+
+}

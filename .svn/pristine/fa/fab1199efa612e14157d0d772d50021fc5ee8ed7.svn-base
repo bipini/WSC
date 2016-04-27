@@ -1,0 +1,67 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>User Registration Form</title>
+
+ <link href="wscui/css/style.css"  rel="stylesheet">
+ <link rel="stylesheet" href="wscui/css/bootstrap.min.css">
+
+<script src="wscui/js/jquery.js"></script>
+<script src="wscui/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div id="register" class="container-full">
+		
+		<form action="regUser" method="post" class="formreg">		
+			<h2 class="form-signin-heading" align="center">User Registration Form</h2>
+			<fieldset>
+				<table class="form-register">
+					<tr>
+						<td colspan="2">
+							
+						</td>						
+					</tr>
+					<tr>
+						<td>
+							<b>UserName: </b>
+						</td>
+						<td>
+							<input type="text" class="form-control" name="userName" required="true" placeholder="User Name" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Password: </b>
+						</td>
+						<td>
+							<input type="password" class="form-control" name="password" required="true" placeholder="Password" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Email: </b>
+						</td>
+						<td>
+							<input type="email" class="form-control" name="email" required="true" placeholder="Email" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="btn btn-lg btn-primary btn-block" type="reset" value="Reset">Reset</button>
+						</td>
+						<td>
+							<button class="btn btn-lg btn-primary btn-block" type="submit" value="Register">Register</button>
+						</td>						
+					</tr>
+				</table>			
+			</fieldset>
+		</form>
+		
+	</div>
+	<!-- end login -->
+</body>
+</html>

@@ -1,0 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+
+<link href="wscui/css/style.css"  rel="stylesheet">
+<link rel="stylesheet" href="wscui/css/bootstrap.min.css">
+
+<script src="wscui/js/jquery.js"></script>
+<script src="wscui/js/bootstrap.min.js"></script>
+
+<div style="background-color: #3D88C9; color: #FFF;height: 60px !important; min-height: 10% !important;">
+	<div style="float: left;"><img alt="Logo" src="wscui/images/wsc_logo.png"></div>
+	<div id="loged_in_user" style="float: right;padding-right: 10%;padding-top: 20px;">USER</div>
+</div>

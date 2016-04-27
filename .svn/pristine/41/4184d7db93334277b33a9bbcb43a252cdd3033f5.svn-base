@@ -1,0 +1,62 @@
+/**
+ * 
+ */
+package com.mindfire.wsc.dao;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.mindfire.wsc.model.UserDTO;
+
+/**
+ * @author bipinis
+ *
+ */
+
+@Repository
+public class UserDAO{
+
+		
+//	@Autowired
+//	private JdbcTemplate jt;	
+	
+	public UserDTO processLogin(String uname, String password) {
+		 return loginAuthorization(uname, password);
+		
+	}
+	
+	
+	public UserDTO loginAuthorization(String uname, String pass) {
+		String sql = "select user_id,user_name,password,user_email, user_role from user where user_name=\""+uname+"\" and password=\""+pass+"\"";		
+		UserDTO user = null;
+		//List<User> Users = new ArrayList<User>();
+		try {			
+//		List<Map<String, Object>> rows = jt.queryForList(sql);
+//		System.out.println("!!!!!!!!!!!!!1 "+sql);
+//		for (Map<String, Object> row : rows) {
+//			user = new User();
+//			user.setUsername((String) row.get("user_name"));
+//			user.setEmail((String) row.get("user_email"));
+//			user.setRole((String) row.get("user_role"));
+//			user.setUserid((Integer) row.get("user_id"));
+							
+			
+//			System.out.println("Userid="+ row.get("user_id"));
+//			
+//		}		
+		System.out.println("Connection Ends");
+		
+		
+		} catch(DataAccessException e) {
+			e.printStackTrace();			
+		}
+		return user;
+	}
+
+}

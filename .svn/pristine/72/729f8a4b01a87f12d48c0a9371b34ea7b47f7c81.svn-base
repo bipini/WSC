@@ -1,0 +1,60 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Manage User</title>
+</head>
+<body>
+	<%@include file="header.jsp"%>
+	<div id="register" class="container-full">		
+		<form class="formreg" action="/wsc/admin/user/saveUser" method="post" >		
+			<h2 class="form-signin-heading" align="center">User Registration Form</h2>			
+			<fieldset>
+				<table class="form-register">					
+					<tr>
+						<td>
+							<b>UserName: </b>
+						</td>
+						<td>
+							<input type="text" class="form-control" name="userName" required="true" placeholder="User Name" 
+							value="${userdetail.userName}" />							
+							
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Password: </b>
+						</td>
+						<td>
+							<input type="password" class="form-control" name="password" required="true" placeholder="Password"
+							value="${userdetail.password}" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Email: </b>
+						</td>
+						<td>
+							<input type="email" class="form-control" name="email" required="true" placeholder="Email" 
+							value="${userdetail.email}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="btn btn-lg btn-primary btn-block" type="reset" value="Reset">Reset</button>
+						</td>
+						<td>
+							<button class="btn btn-lg btn-primary btn-block" type="submit" value="Register">Save</button>
+						</td>						
+					</tr>
+				</table>			
+			</fieldset>
+		</form>
+		
+	</div>
+	<!-- end login -->
+</body>
+</html>

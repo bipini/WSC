@@ -1,0 +1,142 @@
+body  {
+background: #F4F4F4;
+margin: 0;
+}
+
+#container { 
+width: 780px;
+margin: 0 auto;
+background: #FFFFFF;
+}
+
+#header { 
+padding: 45px 0 20px 40px;
+} 
+
+#header a {
+color: #121212;
+text-decoration: none;
+font-size: 30px; 
+font-family: "Myriad Pro", "Arial Narrow";
+}
+
+#menu {
+background-color: #3b7687; 
+padding: 6px 0 6px 40px;
+}
+
+#menu a {
+color: #c5d6db;
+text-decoration: none; 
+font-size: 14px; 
+font-family: "Arial Narrow", "Myriad Pro";
+}
+
+#menu a:hover {
+color: #ecf2f3;
+}
+
+#sidebar {
+float: left;
+width: 120px;
+padding: 30px 0 0 40px;
+margin: 0;
+}
+
+h1 {
+margin: 0px;
+color: #869843; 
+font-size:24px; 
+font-family: "Arial Narrow", "Myriad Pro"; 
+font-weight: normal;
+}
+
+h2 {
+color: #3b7687;
+font-size: 15px; 
+margin: 20px 0 5px 0;
+}
+
+#main { 
+margin: 0 0 0 180px;
+padding: 35px 40px 30px 0;
+color: #444444;
+font-family: "Georgia";
+font-size: 13px; 
+line-height: 18px;
+text-align: justify;
+} 
+
+#main a {
+color: #3b7687; 
+text-decoration: none;
+}
+
+#main a:hover {
+color: #444444;
+}
+
+#footer {
+padding: 6px 40px 6px 40px;
+background: #d6d6d6; 
+font-family: "Lucida Sans Unicode";
+color: #444444;
+font-size: 11px;
+text-align: right;
+}
+
+#footer a {
+text-decoration: none; 
+color: #262626;
+}
+
+#footer a:hover {
+color: #666666;
+}
+
+.separator {
+font-size:11px;
+color:#FFFFFF;
+}
+
+.form-signin {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+}
+
+.form-register {
+	margin: 0 auto;
+    max-width: 630px;
+    padding: 15px;
+}
+.form-register td, th{padding: 10px;}
+
+table.wsc-table {
+	width: 100%;
+	margin-top: 50px;
+	margin-left: 10px;
+	background-color: #D8E7F4;
+	border: 2px solid #337AB7;
+	overflow:auto;
+}
+
+table.wsc-table tr {
+		background: #D8E7F4;		
+	}
+/*  Define the background color for all the ODD background rows  */
+table.wsc-table tr:nth-child(odd) { 
+	background: #D8E7F4;
+}
+/*  Define the background color for all the EVEN background rows  */
+table.wsc-table tr:nth-child(even) {
+	background: #FFF;
+}
+
+#loged_in_user {float: right; padding-right: 10%; padding-top: 20px; color: #FFF;width:25%;}
+.nav {float: right;}
+.nav ul{display:none;position:absolute;top:100%;left:-30px;padding:0;margin:0px;z-index:99999;border:2px solid #154165;background:#FFF;list-style-type: none;}
+.nav li li{white-space:normal}
+.nav ul a{width:150px;display:block;font-weight:bold;text-transform:capitalize;text-decoration:none;padding:5px 10px;color:#154165;}
+.nav li:hover >ul{display:block}
+.nav li li a:hover{background:#3D88C9;color:#FFF;}

@@ -1,0 +1,70 @@
+/**
+ * 
+ */
+package com.mindfire.wsc;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.mindfire.wsc.model.UserDTO;
+import com.mindfire.wsc.service.UserService;
+
+
+/**
+ * It is used to Validate the username and password.
+ * @author bipinis
+ *
+ */
+@Controller
+public class LoginController {
+	
+	@Autowired
+	private UserService userService;	
+	
+	@RequestMapping(value="/login", method = RequestMethod.GET) 
+		public String goHome() {
+			return "login";
+		}	
+	
+	/** 
+	 * This method is used to check the login authorization
+	 * @param userservice
+	 * @param model
+	 * @return
+	 */	
+	
+	@RequestMapping(value="/login", method = RequestMethod.POST)
+	public ModelAndView goLogin(UserDTO providedUser,HttpSession session) {
+
+		UserDTO fetchedUser = userService.getUserByUserName(providedUser.getUserName());
+		
+		if(fetchedUser.getUserName() == null
+				|| !fetchedUser.getPassword().equals(providedUser.getPassword())) {			
+			return new ModelAndView("redirect:/login");			
+		}
+		
+		if(fetchedUser.getRole().equalsIgnoreCase("ADMIN")){//Admin user login
+			session.setAttribute("userSession", fetchedUser);
+			return new ModelAndView("redirect:/admin");
+		} else{//Normal user login
+			session.setAttribute("userSession", fetchedUser);
+			return new ModelAndView("redirect:/sales");
+		}
+		
+	}
+	
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public ModelAndView logoutUser(HttpSession session) {		
+		if(session!=null) {
+			session.removeAttribute("userSession");
+			session.invalidate();
+		}
+		return new ModelAndView("redirect:/login");		
+	}
+	
+}
