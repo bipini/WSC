@@ -2,7 +2,7 @@ package com.mindfire.wsc.constants;
 
 /*
  * Class contains only constants
- * Used as final varibales
+ * Used as final varibales bipin
  */
 public class ConstantVaribales {
 	
