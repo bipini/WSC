@@ -6,7 +6,7 @@ package com.mindfire.wsc.constants;
  */
 public class ConstantVaribales {
 	
-	// Server Informations
+	// Server Informationss
     public final static String from = "bipinsahoo@hotmail.com";
     public final static String pass ="2#$Mindfire";    
     public final static String host = "smtp.live.com";

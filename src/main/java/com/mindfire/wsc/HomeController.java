@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Handles requests for the application home page.
+ * @Bipin
  */
 @Controller
 public class HomeController {
@@ -18,6 +19,8 @@ public class HomeController {
 	
 	/**
 	 * Simply selects the home view to render by returning its name. Its now redirect to login page
+	 * Used for Redirect
+	 * @From Browser
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale) {
