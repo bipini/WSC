@@ -19,6 +19,7 @@ public class HomeController {
 	
 	/**
 	 * Simply selects the home view to render by returning its name. Its now redirect to login page
+	 * Used for Redirect
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale) {
