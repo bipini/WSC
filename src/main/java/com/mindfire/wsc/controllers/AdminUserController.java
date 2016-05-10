@@ -1,6 +1,5 @@
 package com.mindfire.wsc.controllers;
 
-import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 
 import javax.servlet.http.HttpServletResponse;
