@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Home</title>
 
 <!-- JQuery CSS -->
@@ -67,13 +68,13 @@
 	%>
 </div>
 
-	<div id="main-warper" class="container-full">
+	<!--<div id="main-warper" class="container-full">		
 		<p>
 			<c:out value='${msg}' />
 		</p>
 		<div style="width: 25%; text-align: center;">
 			<a href="admin/user">Add User</a>
-			<!-- <table class="wsc-table" >
+			 <table class="wsc-table" >
 				<tr>
 					<th>Name</th>
 					<th>Email</th>
@@ -89,11 +90,16 @@
 					</tr>
 
 				</c:forEach>
-			</table>-->
+			</table>
 		</div>
-	</div>
-		
-	<div class="jgrid">				
+	</div>	-->
+	
+	<div class="container-fluid">
+	  <h1 align="center">Wholesale Sales Connect</h1>
+	  <p><a href="admin/user">Add User</a></p>
+	  <div class="row">
+	    <div class="col-sm-6">
+	    	<div class="jgrid">				
 		
 		<script language="javascript">
 		$(document).ready(function () {		
@@ -147,6 +153,18 @@
 		<table id="theGrid"></table>
 		<div id="gridPager"></div>
 	</div>
-	
+	    </div>
+	    <div class="col-sm-6">
+	    	<script>
+				function popup(url, title, w, h) {
+				var left = (screen.width/2)-(w/2);
+				var top = (screen.height/2)-(h/2);
+				return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+				} 
+			</script> 
+	    	<a href="javascript:void(0);" onClick="popup('admin/product/addcategory', 'window',300,300)">Add Product Category</a>
+	    </div>
+	  </div>
+	</div>
 </body>
 </html>

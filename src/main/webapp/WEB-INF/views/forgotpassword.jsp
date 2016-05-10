@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link href="/wsc/wscui/css/style.css" rel="stylesheet">
 <link rel="stylesheet" href="/wsc/wscui/css/bootstrap.min.css">
