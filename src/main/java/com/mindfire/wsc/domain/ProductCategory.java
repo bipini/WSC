@@ -4,10 +4,15 @@
 package com.mindfire.wsc.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -21,7 +26,8 @@ import javax.persistence.Table;
 public class ProductCategory {
 	
 	@Id
-	@Column
+	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@Column(name="categoryId", unique=true, nullable=false)	
 	private int categoryId;
 	
 	@Column
@@ -32,6 +38,23 @@ public class ProductCategory {
 	
 	@Column
 	private Date timestamp;
+	
+	@OneToMany(mappedBy="productCategory",cascade = CascadeType.ALL)
+	private Set<Products> products;
+	
+	/**
+	 * @return the products
+	 */
+	public Set<Products> getProducts() {
+		return products;
+	}
+
+	/**
+	 * @param products the products to set
+	 */
+	public void setProducts(Set<Products> products) {
+		this.products = products;
+	}
 
 	/**
 	 * @return the categoryId
