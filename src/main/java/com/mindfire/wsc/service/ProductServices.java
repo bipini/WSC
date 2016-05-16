@@ -3,12 +3,18 @@
  */
 package com.mindfire.wsc.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mindfire.wsc.domain.ProductCategory;
+import com.mindfire.wsc.domain.Products;
 import com.mindfire.wsc.model.ProductCategoryDTO;
+import com.mindfire.wsc.model.ProductsDTO;
 import com.mindfire.wsc.repositories.ProductRepository;
+import com.mindfire.wsc.repositories.ProductsRepository;
 
 /**
  * @author bipins
@@ -19,6 +25,9 @@ public class ProductServices {
 	
 	@Autowired
 	private ProductRepository prepo;
+	
+	@Autowired
+	private ProductsRepository productsrepo;
 	
 	/*
 	 * Get the Category Name as parameter
@@ -41,7 +50,7 @@ public class ProductServices {
 	public void saveCategory(ProductCategoryDTO categoryDTO, String username) {	
 		
 		
-		ProductCategory pCategory = convertProductDtoToProductDomain(categoryDTO,username);
+		ProductCategory pCategory = convertProductCategoryDtoToProductCategoryDomain(categoryDTO,username);
 		ProductCategory existingCategory = prepo.findByCategoryName(categoryDTO.getCategoryName());
 		
 		//This is for Existing user to rename the CategoryName to a new name		
@@ -55,8 +64,11 @@ public class ProductServices {
 		}
 		
 	}
-
-	private ProductCategory convertProductDtoToProductDomain(
+	
+	/*
+	 * Convert Productdto object to ProductDomain object
+	 */
+	private ProductCategory convertProductCategoryDtoToProductCategoryDomain(
 			ProductCategoryDTO categoryDTO , String username) {
 		
 		ProductCategory productCategory = null;
@@ -67,6 +79,68 @@ public class ProductServices {
 			productCategory.setCategoryId(categoryDTO.getCategoryId());			
 		}
 		return productCategory;		
+	}
+	
+	/*
+	 * Get all product Category
+	 */
+	public List<ProductCategoryDTO> getAllProductCategory() {
+
+		List<ProductCategoryDTO> productDtos = new ArrayList<ProductCategoryDTO>();
+		List<ProductCategory> categories = prepo.findAll();
+		
+		for(ProductCategory categorie : categories ){			
+			productDtos.add(convertProductCategoryDomainToProductCategoryDto(categorie));			
+		}
+		
+		return productDtos;		
+	}
+	
+	/*
+	 * Convert ProductCategoryDomain object to Dto object
+	 */
+	private ProductCategoryDTO convertProductCategoryDomainToProductCategoryDto(
+			ProductCategory categorie) {
+		ProductCategoryDTO pcategorydto = null;		
+		if(categorie != null) {
+			pcategorydto = new ProductCategoryDTO();
+			pcategorydto.setCategoryId(categorie.getCategoryId());
+			pcategorydto.setAddBy(categorie.getAddby());
+			pcategorydto.setCategoryName(categorie.getCategoryName());
+		}
+		return pcategorydto;
+	}
+	
+	/*
+	 * Get List of Products based on Category ID
+	 */
+	public List<ProductsDTO> getProductDetails(int categoryId) {
+		
+		List<ProductsDTO> productsDtos = new ArrayList<ProductsDTO>();
+		List<Products> allproducts = productsrepo.findAll();
+		
+		for(Products products : allproducts ){			
+			productsDtos.add(convertProductsDomainToProductsDto(products));			
+		}
+		
+		return productsDtos;	
+	}
+	
+	/*
+	 * Convert Products Domain to Products DTO
+	 */
+	private ProductsDTO convertProductsDomainToProductsDto(Products products) {
+		
+		ProductsDTO productDto = null;
+		if(products != null) {
+			productDto = new ProductsDTO();
+			productDto.setProductNumber(products.getProductNumber());
+			productDto.setCostprice(products.getCostprice());
+			productDto.setProductname(products.getProductname());
+			productDto.setSellingprice(products.getSellingprice());
+			productDto.setQuantity(products.getQuantity());
+		}
+		return productDto;
 	}
 	
 }
