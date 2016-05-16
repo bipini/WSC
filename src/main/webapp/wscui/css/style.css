@@ -140,3 +140,4 @@ table.wsc-table tr:nth-child(even) {
 .nav ul a{width:150px;display:block;font-weight:bold;text-transform:capitalize;text-decoration:none;padding:5px 10px;color:#154165;}
 .nav li:hover >ul{display:block}
 .nav li li a:hover{background:#3D88C9;color:#FFF;}
+.dropdown-menu span{display:none;}
