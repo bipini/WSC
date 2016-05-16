@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 	<%@ page session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.mindfire.wsc.model.UserDTO" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,7 +24,6 @@
 <script type="text/javascript" src="/wsc/wscui/js/grid.locale-en.js"></script>
 <!-- The atual jqGrid code -->
 <script type="text/javascript" src="/wsc/wscui/js/jquery.jqGrid.js"></script>
-
 </head>
 <body>	
 <!-- Header Starts-->
@@ -36,6 +36,12 @@
 	if (session.getAttribute("userSession") == null
 			&& !request.getRequestURL().toString()
 					.endsWith("/login.jsp")) {
+		response.sendRedirect("/wsc/login");
+	}
+	
+	// This page is specific to Admin User only
+	UserDTO userDto = (UserDTO)session.getAttribute("userSession");
+	if(!("admin").equalsIgnoreCase(userDto.getRole())) {
 		response.sendRedirect("/wsc/login");
 	}
 %>
@@ -66,39 +72,13 @@
 	<%
 		}
 	%>
-</div>
-
-	<!--<div id="main-warper" class="container-full">		
-		<p>
-			<c:out value='${msg}' />
-		</p>
-		<div style="width: 25%; text-align: center;">
-			<a href="admin/user">Add User</a>
-			 <table class="wsc-table" >
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th colspan="2">Action</th>
-				</tr>
-				<c:forEach items="${users}" var="user">
-					<tr>
-						<td><c:out value="${user.userName}" /></td>
-						<td><c:out value="${user.email}" /></td>
-						<td><a href="admin/user/edit/${user.userId}">Edit</a></td>
-						<td>&nbsp;</td>
-						<td><a href="admin/user/delete/${user.userId}">Delete</a></td>
-					</tr>
-
-				</c:forEach>
-			</table>
-		</div>
-	</div>	-->
-	
+	</div>
+		
 	<div class="container-fluid">
 	  <h1 align="center">Wholesale Sales Connect</h1>
-	  <p><a href="admin/user">Add User</a></p>
+	  <p><a href="/wsc/admin/user">Add User</a></p>
 	  <div class="row">
-	    <div class="col-sm-6">
+	    <div class="col-sm-5">
 	    	<div class="jgrid">				
 		
 		<script language="javascript">
@@ -152,9 +132,42 @@
 		</script>
 		<table id="theGrid"></table>
 		<div id="gridPager"></div>
-	</div>
+		</div>
 	    </div>
-	    <div class="col-sm-6">
+<script>
+$(document).ready(function(){    
+    $('.dropdown-menu li').on('click', function(){		 
+         var pid = $('span', this).text();
+         alert(pid);		      
+        $.ajax({
+            dataType : "json",
+            url : '/wsc/admin/product/getcategorydetail/'+pid,
+            headers : {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+            },
+            type : 'GET',
+            success : function(data) {                
+                var exHTMl = '<tr><td>Product Number</td><td>Product Name</td><td>Product Quantity</td><td>Cost Price</td><td>Selling Price</td></tr>';
+                var trHTML = '';                
+                $.each(data,function(key, item) {
+                	trHTML += '<tr><td>' + item.productNumber + '</td><td>' + item.productname + '</td><td>' + item.quantity + '</td><td>' + item.costprice + '</td><td>' + + '</td><td>' + item.sellingprice + '</td></tr>';
+                });
+                $('#records_table').empty()
+                $('#records_table').append(exHTMl);
+                $('#records_table').append(trHTML);                
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            	var errHTML = 'Products are not added to this category, Please check later'; 
+            	 $('#records_table').empty()
+                 $('#records_table').append(errHTML);
+            	 alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+            } 
+        });
+});
+});
+</script>
+	    <div class="col-sm-7">
 	    	<script>
 				function popup(url, title, w, h) {
 				var left = (screen.width/2)-(w/2);
@@ -162,7 +175,45 @@
 				return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
 				} 
 			</script> 
-	    	<a href="javascript:void(0);" onClick="popup('admin/product/addcategory', 'window',300,300)">Add Product Category</a>
+	    	<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/addcategory', 'window',300,300)">Add Product Category</a>
+	    	  <p>&nbsp;</p>
+	    	  <div class="dropdown" align="center">
+	    	  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Categories
+			    <span class="caret"></span></button>			   
+			    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" align="center">
+			      <c:forEach items="${productCategory}" var="productcategory">					            
+		            <li id="getit" role="presentation"><a role="menuitem" tabindex="-1" href="#"><span>${productcategory.categoryId}</span>${productcategory.categoryName}</a></li>	
+			      </c:forEach>		      
+			    </ul>
+ 			    <p>&nbsp;</p> 
+			    <table class="table table-striped table-bordered table-hover" id="records_table">			    	
+			    	<!--<c:if test="${not empty productsDetails}">   
+					<tr>
+						<td>ProductNumber</td>
+						<td>ProductName</td>
+						<td>Quantity</td>
+						<td>Costprice</td>
+						<td>Sellingprice</td>
+					</tr>
+			    	<c:forEach items="${productsDetails}" var="products">	
+						<tr>
+							<td>${products.productNumber}</td>
+							<td>${products.productname}</td>
+							<td>${products.quantity}</td>
+							<td>${products.costprice}</td>
+							<td>${products.sellingprice}</td>
+						</tr>	            
+		            </c:forEach>
+		            </c:if>
+		            <c:if test="${empty productsDetails}">
+		            	<tr>
+			            	<td>
+			            		No Category is selected. Please check later
+			            	</td>
+		            	</tr>
+		            </c:if> -->
+			    </table>		    
+			  </div>
 	    </div>
 	  </div>
 	</div>
