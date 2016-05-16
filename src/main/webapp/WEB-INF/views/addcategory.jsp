@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.mindfire.wsc.model.UserDTO" %>
 <title>Add Category</title>
 
 <script type="text/javascript">
@@ -27,7 +28,7 @@ xhttp.onreadystatechange = function() {
     	  document.getElementById("categoryName").value = "";    	  
     	  }  
     else {
-    	window.hide();
+    	window.closeWindow();
     }
   }
 };
@@ -53,7 +54,13 @@ function closeWindow(){
 					.endsWith("/login.jsp")) {
 		response.sendRedirect("/wsc/login");
 	}
-
+	
+	//This page is specific to Admin User only
+	UserDTO userDto = (UserDTO)session.getAttribute("userSession");
+	if(!("admin").equalsIgnoreCase(userDto.getRole())) {
+		response.sendRedirect("/wsc/login");
+	}
+	
 	// Show the Indivisual Photo
 	String photo = "/wsc/wscui/images/user.png";
 	if(session.getAttribute("userPhoto") != null) {
