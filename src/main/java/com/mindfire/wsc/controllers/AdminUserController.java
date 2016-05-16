@@ -38,9 +38,14 @@ public class AdminUserController {
 	 * This method is used to redirect the user to AdminUser.jsp
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public ModelAndView addUser(ModelMap model) {
+	public ModelAndView addUser(ModelMap model , HttpSession session) {
 		
-		return new ModelAndView("AdminUser");
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(("admin").equals(udto.getRole())) {
+			return new ModelAndView("AdminUser");
+		}
+		return new ModelAndView("redirect:/login");
 	}
 	
 	/*
@@ -48,7 +53,14 @@ public class AdminUserController {
 	 * here user id is taken as @PathVaribale, as parameter
 	 */
 	@RequestMapping(value = "/edit/{eno}", method = RequestMethod.GET)
-	public ModelAndView editUser(ModelMap model, @PathVariable("eno") int eno) {
+	public ModelAndView editUser(ModelMap model, @PathVariable("eno") int eno, HttpSession session) {
+		
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			return new ModelAndView("redirect:/login");
+		}
+				
 		if (eno >= 0) {
 			model.addAttribute("userdetail", userService.modifyUser(eno));
 		}
@@ -85,7 +97,14 @@ public class AdminUserController {
 	 * Parameter used as user id.
 	 */
 	@RequestMapping(value = "/delete/{eno}", method = RequestMethod.GET)
-	public ModelAndView deleteUser(ModelMap model, @PathVariable("eno") int eno) {
+	public ModelAndView deleteUser(ModelMap model, @PathVariable("eno") int eno, HttpSession session) {
+		
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			return new ModelAndView("redirect:/login");
+		}
+				
 		if (eno >= 0) {
 			userService.deleteUser(eno);
 			model.addAttribute("msg", "User Deleted Successfully");
