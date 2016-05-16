@@ -75,7 +75,7 @@ public class LoginController {
 	 * Redirect the User to change the password on first login
 	 * @Requestparam UserName
 	 * @Session
-	 */
+	 */	
 	@RequestMapping(value="/user/sendpassword", method = RequestMethod.POST) 
 	public String forgotPassword(UserDTO providedUser, ModelMap model) throws UnknownHostException, TwilioRestException {
 			
