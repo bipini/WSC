@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mindfire.wsc.model.UserDTO;
+import com.mindfire.wsc.service.ProductServices;
 import com.mindfire.wsc.service.UserService;
 
 /**
@@ -23,10 +24,18 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ProductServices productService;	
 		
 	@RequestMapping(method=RequestMethod.GET)
 	public String getAdminHome(ModelMap mmap) {	
-		mmap.addAttribute("users", userService.getAllUsers());		
+		//Return all Users as a list
+		mmap.addAttribute("users", userService.getAllUsers());	
+		
+		//Return All Product category to Admin Page
+		mmap.addAttribute("productCategory", productService.getAllProductCategory());		
+		
 		return "AdminHome";
 	}	
 	
