@@ -33,8 +33,8 @@ xhttp.send();
 }
 </script>
 </head>
-<body>
-	<%@include file="header.jsp"%>
+<body>	
+	<%@include file="header.jsp"%>	
 	<script type="text/javascript">
 	    $(function()
 	    {	
@@ -44,6 +44,7 @@ xhttp.send();
 	        $('#userName').attr('readonly', 'true'); // mark it as read only
 	        //$('#userName').blur(); 
 	        $('#userName').css('background-color' , '#DEDEDE'); // change the background color
+	        $('#userName').prop('disabled', true);
 	    	}
 	
 	    });
