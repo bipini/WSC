@@ -4,7 +4,9 @@
 package com.mindfire.wsc.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,10 +116,14 @@ public class ProductServices {
 	/*
 	 * Get List of Products based on Category ID
 	 */
-	public List<ProductsDTO> getProductDetails(int categoryId) {
+	public Set<ProductsDTO> getProductDetails(int categoryId) {
 		
-		List<ProductsDTO> productsDtos = new ArrayList<ProductsDTO>();
-		List<Products> allproducts = productsrepo.findAll();
+		//Get the Product Category object
+		ProductCategory pCategory = prepo.findByCategoryId(categoryId);
+				
+		Set<ProductsDTO> productsDtos = new HashSet<ProductsDTO>();
+		
+		Set<Products> allproducts = pCategory.getProducts();
 		
 		for(Products products : allproducts ){			
 			productsDtos.add(convertProductsDomainToProductsDto(products));			
