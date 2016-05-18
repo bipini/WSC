@@ -19,7 +19,8 @@ public class ProductCategoryDTO {
 	
 	@Size(min = 5, max = 100)
 	private String categoryName;
-	private String addBy;
+	private String addBy;	
+	
 	/**
 	 * @return the categoryId
 	 */
