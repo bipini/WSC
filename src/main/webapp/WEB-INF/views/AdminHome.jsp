@@ -77,13 +77,13 @@
 	<div class="container-fluid">
 	  <h1 align="center">Wholesale Sales Connect</h1>
 	  <p><a href="/wsc/admin/user">Add User</a></p>
+	  <p><span style="color:red"><c:out value="${msg}"/></span></p>
 	  <div class="row">
 	    <div class="col-sm-5">
 	    	<div class="jgrid">				
 		
 		<script language="javascript">
-		$(document).ready(function () {		
-					    	 
+		$(document).ready(function () {					    	 
 	    'use strict';
 	     var gidData = [	                    
 					<c:forEach items="${users}" var="user">	
@@ -112,7 +112,7 @@
 	        gridview: true,             
 	        rownumbers: false,
 	        rowNum: 10,
-	        rowList: [5, 10, 15],	        
+	        rowList: [5, 10, 15,20,25],  
 	        pager: '#gridPager',
 	        viewrecords: true,
 	        multiSort:true,
@@ -126,7 +126,7 @@
             return "<a href='<%=request.getContextPath()%>/admin/user/edit/" + rowdata.id + "' class='ui-icon ui-icon-pencil' ></a>";
         }
         function deleteLink(cellValue, options, rowdata, action)  {            
-            return "<a href='<%=request.getContextPath()%>/admin/user/delete/" + rowdata.id + "' class='ui-icon ui-icon-closethick' ></a>";
+            return "<a href='<%=request.getContextPath()%>/admin/user/delete/" + rowdata.id + "' class='ui-icon ui-icon-closethick' onClick=\"return confirm(\'Are you sure you want to delete this item?\');\"></a>";
         }        
 		});
 		</script>
@@ -138,7 +138,7 @@
 $(document).ready(function(){    
     $('.dropdown-menu li').on('click', function(){		 
          var pid = $('span', this).text();
-         alert(pid);		      
+         //alert(pid);		      
         $.ajax({
             dataType : "json",
             url : '/wsc/admin/product/getcategorydetail/'+pid,
@@ -148,14 +148,17 @@ $(document).ready(function(){
             },
             type : 'GET',
             success : function(data) {                
-                var exHTMl = '<tr><td>Product Number</td><td>Product Name</td><td>Product Quantity</td><td>Cost Price</td><td>Selling Price</td></tr>';
+                var exHTMl = '<thead><tr><td>Product Number</td><td>Product Name</td><td>Product Quantity</td><td>Cost Price</td><td>Selling Price</td><td>Edit/Delete</td></tr></thead><tbody>';
                 var trHTML = '';                
                 $.each(data,function(key, item) {
-                	trHTML += '<tr><td>' + item.productNumber + '</td><td>' + item.productname + '</td><td>' + item.quantity + '</td><td>' + item.costprice + '</td><td>' + + '</td><td>' + item.sellingprice + '</td></tr>';
+                	trHTML += '<tr><td>' + item.productNumber + '</td><td>' + item.productname + '</td><td>' + item.quantity + '</td><td>' + item.costprice + '</td><td>' + item.sellingprice + 
+                	'</td><td><a href="javascript:void(0);" onClick="popup(\'/wsc/admin/product/editproducts/'+
+                			item.productNumber+'\', \'window\',500,600)"><img src="/wsc/wscui/images/edit.png" alt="Edit" /></a>&nbsp;&nbsp;<a href="/wsc/admin/product/deleteproducts/'+
+                			item.productNumber+'" onClick="return confirm(\'Are you sure you want to delete this item?\');"><img src="/wsc/wscui/images/delete.png" alt="Delete" /></a></td></tr>';
                 });
-                $('#records_table').empty()
+                $('#records_table').empty();
                 $('#records_table').append(exHTMl);
-                $('#records_table').append(trHTML);                
+                $('#records_table').append(trHTML).append('</tbody>');                
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
             	var errHTML = 'Products are not added to this category, Please check later'; 
@@ -164,7 +167,8 @@ $(document).ready(function(){
             	 alert("Status: " + textStatus); alert("Error: " + errorThrown); 
             } 
         });
-});
+	});
+    $('#records_table').DataTable();
 });
 </script>
 	    <div class="col-sm-7">
@@ -174,6 +178,15 @@ $(document).ready(function(){
 				var top = (screen.height/2)-(h/2);
 				return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
 				} 
+				
+				function delconfirm(url){
+					var r = confirm("Are you Sure, you want to delete");
+					if (r == true) 
+						a.href = url;
+						//window.submit(url);
+				     else
+				    	return flase;				    
+				}
 			</script> 
 	    	<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/addcategory', 'window',300,300)">Add Product Category</a>
 	    	  <p>&nbsp;</p>
@@ -186,32 +199,8 @@ $(document).ready(function(){
 			      </c:forEach>		      
 			    </ul>
  			    <p>&nbsp;</p> 
-			    <table class="table table-striped table-bordered table-hover" id="records_table">			    	
-			    	<!--<c:if test="${not empty productsDetails}">   
-					<tr>
-						<td>ProductNumber</td>
-						<td>ProductName</td>
-						<td>Quantity</td>
-						<td>Costprice</td>
-						<td>Sellingprice</td>
-					</tr>
-			    	<c:forEach items="${productsDetails}" var="products">	
-						<tr>
-							<td>${products.productNumber}</td>
-							<td>${products.productname}</td>
-							<td>${products.quantity}</td>
-							<td>${products.costprice}</td>
-							<td>${products.sellingprice}</td>
-						</tr>	            
-		            </c:forEach>
-		            </c:if>
-		            <c:if test="${empty productsDetails}">
-		            	<tr>
-			            	<td>
-			            		No Category is selected. Please check later
-			            	</td>
-		            	</tr>
-		            </c:if> -->
+			    <table id="records_table" class="table table-striped table-bordered table-hover">			    	
+			    	
 			    </table>		    
 			  </div>
 	    </div>
