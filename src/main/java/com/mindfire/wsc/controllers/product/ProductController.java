@@ -3,7 +3,7 @@
  */
 package com.mindfire.wsc.controllers.product;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -127,8 +127,8 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/getcategorydetail/{categoryId}", headers="Accept=*/*", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ProductsDTO> getProductsUsingCategoryId(HttpServletResponse response, ModelMap model, @PathVariable("categoryId") int  categoryId,HttpSession session) {
-		List<ProductsDTO> products = null;
+	public Set<ProductsDTO> getProductsUsingCategoryId(HttpServletResponse response, ModelMap model, @PathVariable("categoryId") int  categoryId,HttpSession session) {
+		Set<ProductsDTO> products = null;
 		
 		//Check Session for Admin
 		UserDTO user = (UserDTO)session.getAttribute("userSession");
