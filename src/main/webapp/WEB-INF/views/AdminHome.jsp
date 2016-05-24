@@ -153,7 +153,7 @@ $(document).ready(function(){
                 $.each(data,function(key, item) {
                 	trHTML += '<tr><td>' + item.productNumber + '</td><td>' + item.productname + '</td><td>' + item.quantity + '</td><td>' + item.costprice + '</td><td>' + item.sellingprice + 
                 	'</td><td><a href="javascript:void(0);" onClick="popup(\'/wsc/admin/product/editproducts/'+
-                			item.productNumber+'\', \'window\',500,600)"><img src="/wsc/wscui/images/edit.png" alt="Edit" /></a>&nbsp;&nbsp;<a href="/wsc/admin/product/deleteproducts/'+
+                			item.productNumber+'\', \'window\',500,500)"><img src="/wsc/wscui/images/edit.png" alt="Edit" /></a>&nbsp;&nbsp;<a href="/wsc/admin/product/deleteproducts/'+
                 			item.productNumber+'" onClick="return confirm(\'Are you sure you want to delete this item?\');"><img src="/wsc/wscui/images/delete.png" alt="Delete" /></a></td></tr>';
                 });
                 $('#records_table').empty();
