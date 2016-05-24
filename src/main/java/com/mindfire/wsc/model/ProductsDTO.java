@@ -5,6 +5,9 @@ package com.mindfire.wsc.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,10 +20,23 @@ public class ProductsDTO {
 	
 	private int categoryId;
 	private String productNumber;
+	
+	@DecimalMax(value = "999999.99", message = "The decimal value can not be more than 999999.99 ")
+    @DecimalMin(value = "1.00", message = "The decimal value can not be less than 1.00 digit ")
 	private String productname;
+	
+	@DecimalMax(value = "999999.99", message = "The decimal value can not be more than 999999.99 ")
+    @DecimalMin(value = "1.00", message = "The decimal value can not be less than 1.00 digit ")
 	private float quantity;
+	
+	@DecimalMax(value = "9999.99", message = "The decimal value can not be more than 9999.99 ")
+    @DecimalMin(value = "1.00", message = "The decimal value can not be less than 1.00 digit ")
 	private float costprice;
+	
+	@DecimalMax(value = "9999.99", message = "The decimal value can not be more than 9999.99 ")
+    @DecimalMin(value = "1.00", message = "The decimal value can not be less than 1.00 digit ")
 	private float sellingprice;
+	
 	private Date timestamp;
 	/**
 	 * @return the productID
