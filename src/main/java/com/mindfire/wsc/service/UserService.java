@@ -160,7 +160,7 @@ public class UserService {
 	 * @param userid
 	 */
 	public UserDTO modifyUser(int eno) {
-		UserDTO userDto = convetUserDomainToUserDTO(userRepo.findByUserId( eno));
+		UserDTO userDto = convetUserDomainToUserDTO(userRepo.findByUserId(eno));
 		return userDto;	
 		
 	}
