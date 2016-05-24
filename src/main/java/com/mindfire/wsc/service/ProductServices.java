@@ -149,4 +149,55 @@ public class ProductServices {
 		return productDto;
 	}
 	
+	//Get the Products detail using ProductNumber
+	public ProductsDTO modifyProductNumber(String productNumber) {
+		
+		// Call to ProductsRepository to get Products Detail
+		ProductsDTO productsDto = convertProductsDomainToProductsDto(productsrepo.findByProductNumber(productNumber));
+		return productsDto;
+	}
+	
+	/*
+	 * Check the Product Name if it is available or not
+	 */
+	public boolean validateProductname(String productName) {
+		
+		boolean flag = false;
+		Products product = productsrepo.findByProductname(productName);
+				
+		if(product != null)
+			flag = true;
+		return flag;		
+	}
+	
+	/*
+	 * save/update the Products To Products Table
+	 */
+	public void updateProducts(ProductsDTO pdto) {
+		Products products = convertProductsDtoToProductsDomain(pdto);
+		Products existingproduct = productsrepo.findByProductNumber(pdto.getProductNumber());
+		
+		// Check if it is an existing product, then update it
+		if(existingproduct != null) {
+			products.setProductNumber(existingproduct.getProductNumber());
+		}
+		
+		// Save the Domain object to Db
+		productsrepo.saveAndFlush(products);
+	}
+	
+	//Convert Products DTO to Products Domain
+	private Products convertProductsDtoToProductsDomain(ProductsDTO pdto) {
+		Products product = null;
+		if(pdto != null) {
+			product = new Products();
+			product.setProductNumber(pdto.getProductNumber());
+			product.setProductname(pdto.getProductname());
+			product.setQuantity(pdto.getQuantity());
+			product.setCostprice(pdto.getCostprice());
+			product.setSellingprice(pdto.getSellingprice());			
+		}
+		return product;
+	}
+	
 }
