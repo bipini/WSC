@@ -36,7 +36,7 @@ xhttp.open("GET", urls, true);
 xhttp.send();
 }
 function closeWindow(){
-	setTimeout("window.close()",5000);
+	setTimeout("window.close()",10000);
 	}
 </script>
 
