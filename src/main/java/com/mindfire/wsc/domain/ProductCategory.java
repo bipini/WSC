@@ -13,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -41,7 +40,7 @@ public class ProductCategory {
 	@Column
 	private Date timestamp;
 	
-	@OneToMany(mappedBy="productCategory",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="productCategory",cascade = CascadeType.REFRESH,fetch = FetchType.EAGER)
 	private Set<Products> products;
 	
 	/**
