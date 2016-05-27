@@ -76,16 +76,31 @@ xhttp.open("GET", urls, true);
 xhttp.send();
 }
 
-//Close the Popup After 10 sec
-function closeWindow(){
-	setTimeout("window.close()",10000);
-}
+$(document).ready(function() {
+	  $("form").submit(function() {
+	    var $form = $(this);
+	    // submit form
+	    $.post($form.attr('action'), $form.serializeArray());
+	    // alert
+	    alert("The request has been submitted.");
+	    // close window
+	    window.close();	    
+	    
+	    //Refresh the Window after Updates
+	    window.onunload = refreshParent;
+	    function refreshParent() {
+	        window.opener.location.reload();
+	    }
+	 	// return
+	    return false;
+	  });
+	});
 </script>	
 </div>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12" align="center">				
-				<form class="formreg" action="/wsc/admin/product/updateProducts" method="post" onsubmit="closeWindow()">		
+				<form class="formreg" action="/wsc/admin/product/updateProducts" method="post">		
 					<h2 class="form-signin-heading" align="center">User Registration Form</h2>			
 					<fieldset>
 						<table class="form-register">					
@@ -95,8 +110,8 @@ function closeWindow(){
 								</td>
 								<td>
 									<input type="text" class="form-control" name="productNumber" id="productNumber" required="true" placeholder="Product Number" 
-									maxlength="40" value="${productdetails.productNumber}" disabled="disabled" readonly />
-									
+									maxlength="40" value="${productdetails.productNumber}" readonly />
+									<input type="hidden" name="categoryId" value="${productdetails.categoryId}" />
 								</td>
 							</tr>
 							<tr>
@@ -138,7 +153,7 @@ function closeWindow(){
 							</tr>
 							<tr>
 								<td>
-									<button class="btn btn-lg btn-primary btn-block" type="reset" value="Reset">Reset</button>
+									<button class="btn btn-lg btn-primary btn-block" type="reset" value="Cancel" onclick="window.open('', '_self', ''); window.close();">Cancel</button>
 								</td>
 								<td>
 									<button class="btn btn-lg btn-primary btn-block" type="submit" value="Register">Save</button>
