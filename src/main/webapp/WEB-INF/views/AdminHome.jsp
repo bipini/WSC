@@ -153,7 +153,7 @@ $(document).ready(function(){
                 $.each(data,function(key, item) {
                 	trHTML += '<tr><td>' + item.productNumber + '</td><td>' + item.productname + '</td><td>' + item.quantity + '</td><td>' + item.costprice + '</td><td>' + item.sellingprice + 
                 	'</td><td><a href="javascript:void(0);" onClick="popup(\'/wsc/admin/product/editproducts/'+
-                			item.productNumber+'\', \'window\',500,500)"><img src="/wsc/wscui/images/edit.png" alt="Edit" /></a>&nbsp;&nbsp;<a href="/wsc/admin/product/deleteproducts/'+
+                			item.productNumber+'?categoryId='+pid+'\', \'window\',500,500)"><img src="/wsc/wscui/images/edit.png" alt="Edit" /></a>&nbsp;&nbsp;<a href="/wsc/admin/product/deleteproducts/'+
                 			item.productNumber+'" onClick="return confirm(\'Are you sure you want to delete this item?\');"><img src="/wsc/wscui/images/delete.png" alt="Delete" /></a></td></tr>';
                 });
                 $('#records_table').empty();
@@ -176,20 +176,23 @@ $(document).ready(function(){
 				function popup(url, title, w, h) {
 				var left = (screen.width/2)-(w/2);
 				var top = (screen.height/2)-(h/2);
-				return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-				} 
-				
-				function delconfirm(url){
-					var r = confirm("Are you Sure, you want to delete");
-					if (r == true) 
-						a.href = url;
-						//window.submit(url);
-				     else
-				    	return flase;				    
-				}
+				return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+				} 			
 			</script> 
-	    	<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/addcategory', 'window',300,300)">Add Product Category</a>
-	    	  <p>&nbsp;</p>
+			<div class="row">
+				<div class="col-sm-6 col-md-6" style="border-right: 1px solid #ccc;">
+					<p><strong>Category</strong><br>
+			    	<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/addproductcategory', 'window',300,300)" class="btn btn-info" role="button">Add Product Category</a>&nbsp;&nbsp;
+			    	<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/editdelproductcategory', 'window',300,300)" class="btn btn-info" role="button">Edit/Delete Category</a>
+			    	</p>
+				</div>
+				<div class="col-sm-6 col-md-6">
+					<p><strong>Products</strong><br>
+					<a href="javascript:void(0);" onClick="popup('/wsc/admin/product/addproductsToCategory', 'window',500,600)" class="btn btn-info" role="button">Add Products to Category</a>
+				</div>
+			</div>			
+	    	<p>&nbsp;</p>    	
+	    	  
 	    	  <div class="dropdown" align="center">
 	    	  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Categories
 			    <span class="caret"></span></button>			   
