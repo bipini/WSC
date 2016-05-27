@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,12 +29,13 @@ import com.mindfire.wsc.service.UserService;
 
 /**
  * @author bipins
- * It will be used to add Categories of product and show its details
+ * It will be used to add Product Categories and Products to categories, and show its details
  *
  */
 @Controller
 @RequestMapping(value = "admin/product")
 public class ProductController {
+	
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	
 	@Autowired
@@ -43,11 +45,10 @@ public class ProductController {
 	private UserService userService;	
 	
 	/**
-	 * Simply selects the home view to render by returning its name. Its now redirect to login page
-	 * Used for Redirect
-	 * @From Browser
+	 * Used Rirect the Url to Addcategory Jsp page
+	 * @admin Session Check
 	 */
-	@RequestMapping(value = "/addcategory", method = RequestMethod.GET)
+	@RequestMapping(value = "/addproductcategory", method = RequestMethod.GET)
 	public String addProductCategory(HttpSession session) {
 		
 		//Check Session for Admin
@@ -61,9 +62,9 @@ public class ProductController {
 	}
 	
 	/**
-	 * Simply selects the home view to render by returning its name. Its now redirect to login page
-	 * Used for Redirect
-	 * @From Browser
+	 * This method is used to check the category name
+	 * @param Catgoryname
+	 * @return to jsp page
 	 */
 	@RequestMapping(value = "/addproduct/{categoryName}", method = RequestMethod.GET)
 	@ResponseBody
@@ -123,9 +124,10 @@ public class ProductController {
 		return ("redirect:/admin");		
 	}
 	
-	/*
+	/**
 	 * This method is used check the user from DB
 	 * Parameter used as user id.
+	 * @return products details to Jsp in JSON
 	 */
 	@RequestMapping(value = "/getcategorydetail/{categoryId}", headers="Accept=*/*", method = RequestMethod.GET)
 	@ResponseBody
@@ -152,12 +154,14 @@ public class ProductController {
 		return products;
 	}
 	
-	/*
+	/**
 	 * This method is used to Edit/Modify the Product using productnumber
 	 * here productNumber is taken as @PathVaribale, as parameter
+	 * @return to EditProducts Jsp page
 	 */
 	@RequestMapping(value = "/editproducts/{productNumber}", method = RequestMethod.GET)
-	public ModelAndView editUser(ModelMap model, @PathVariable("productNumber") String productNumber, HttpSession session) {
+	public ModelAndView editProducts(ModelMap model, @PathVariable("productNumber") String productNumber, 
+			@RequestParam("categoryId") int categoryId, HttpSession session) {
 		
 		//Check Session for Admin , if not redirect to Login page
 		UserDTO udto = (UserDTO)session.getAttribute("userSession");
@@ -167,16 +171,16 @@ public class ProductController {
 		
 		//Null Check
 		if (!("").equals(productNumber)) {
-			model.addAttribute("productdetails", productServices.modifyProductNumber(productNumber));
+			model.addAttribute("productdetails", productServices.modifyProductNumber(productNumber,categoryId));
 		}
 
 		return new ModelAndView("EditProducts");
 	}
 	
 	/**
-	 * Simply selects the home view to render by returning its name. Its now redirect to login page
-	 * Used for Redirect
-	 * @From Browser
+	 * Used to check the ProductName
+	 * @param productname
+	 * @return ajax type value to jsp
 	 */
 	@RequestMapping(value = "/checkProductname/{productname}", method = RequestMethod.GET)
 	@ResponseBody
@@ -205,16 +209,17 @@ public class ProductController {
 		}
 	}
 	
-	/*
+	/**
 	 * This method is used Update the Products Info to database
+	 * @param productsdto object
+	 * @return to AdminHome page
 	 */
 	@RequestMapping(value = "/updateProducts", method = RequestMethod.POST)
 	public String saveUser(@Valid ProductsDTO pdto, BindingResult result) {
 		
-		//Validation the User Detail
-		//if (result.hasErrors()) 		
-			//return "EditProducts";	
+		logger.info("Product Number: "+pdto.getProductNumber());
 		
+		//Check it is not null
 		if(pdto != null) {			
 			//Check if user save successfully
 			productServices.updateProducts(pdto);
@@ -222,4 +227,73 @@ public class ProductController {
 
 		return ("redirect:/admin");
 	}
+	
+	/**
+	 * This method is used to delete indivisual Product using productnumber
+	 * here productNumber is taken as @PathVaribale, as parameter
+	 * @return to AdminHome page
+	 */
+	@RequestMapping(value = "/deleteproducts/{productNumber}", method = RequestMethod.GET)
+	public String deleteProducts(ModelMap model, @PathVariable("productNumber") String productNumber, 
+			HttpSession session) {
+		
+		//Check Session for Admin , if not redirect to Login page
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			return ("redirect:/login");
+		}
+		
+		logger.info(productNumber +" Found, to be deleted");
+		//Null Check
+		if (!("").equals(productNumber)) {
+			productServices.deleteProductNumber(productNumber);
+		}
+
+		return ("redirect:/admin");
+	}
+	
+	/**
+	 * Used to Delete Products Category along with related products
+	 * @Session Check for Admin
+	 * @return to Popup AdminHome page
+	 */
+	@RequestMapping(value = "/editdelproductcategory", method = RequestMethod.GET)
+	public String editProductCategory(ModelMap mmap, HttpSession session) {
+		
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			logger.info("Admin Session Not Valid");
+			return ("redirect:/login");
+		}		
+		
+		//Return All Product category to Admin Page
+		mmap.addAttribute("productCategory", productServices.getAllProductCategory());	
+		return "DeleteProductCategory";
+	}
+	
+	/**
+	 * Used to Delete Products Category along with related products
+	 * @Session Check for Admin
+	 * @return to AdminHome page
+	 */
+	@RequestMapping(value = "/editdeleteproductcategory", method = RequestMethod.POST, params="DeleteCategory")
+	public String deleteProductCategory(ProductCategoryDTO categoryDTO,ModelMap mmap, HttpSession session) {
+		
+		logger.info("Category Id "+ categoryDTO.getCategoryId() +" Found");
+		
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			logger.info("Admin Session Not Valid");
+			return ("redirect:/login");
+		}	
+		
+		mmap.addAttribute("msg", "Category Deleted Successfully");
+		//Delete Product category
+		productServices.deleteSelectedCategory(categoryDTO.getCategoryId());
+		
+		return "DeleteProductCategory";
+	}
+
 }
