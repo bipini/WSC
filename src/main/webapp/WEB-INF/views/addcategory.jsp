@@ -35,18 +35,14 @@ xhttp.onreadystatechange = function() {
 xhttp.open("GET", urls, true);
 xhttp.send();
 }
-function closeWindow(){
-	setTimeout("window.close()",10000);
-	}
 </script>
-
-</head>
-<body>
 <link href="/wsc/wscui/css/style.css" rel="stylesheet">
 <link rel="stylesheet" href="/wsc/wscui/css/bootstrap.min.css">
 
 <script src="/wsc/wscui/js/jquery.js"></script>
 <script src="/wsc/wscui/js/bootstrap.min.js"></script>
+</head>
+<body>
 <%
 	// It is used to check the Session for null or not
 	if (session.getAttribute("userSession") == null
@@ -60,16 +56,29 @@ function closeWindow(){
 	if(!("admin").equalsIgnoreCase(userDto.getRole())) {
 		response.sendRedirect("/wsc/login");
 	}
-	
-	// Show the Indivisual Photo
-	String photo = "/wsc/wscui/images/user.png";
-	if(session.getAttribute("userPhoto") != null) {
-		photo = (String)session.getAttribute("userPhoto");
-		photo = "/wsc/resources/images/"+photo;
-	}
 %>
-<div
-	style="background-color: #3D88C9; color: #FFF; height: 60px !important; min-height: 10% !important;">
+<script>
+$(document).ready(function() {
+	  $("form").submit(function() {
+	    var $form = $(this);
+	    // submit form
+	    $.post($form.attr('action'), $form.serializeArray());
+	    // alert
+	    alert("The request has been submitted.");
+	    // close window
+	    window.close();	    
+	    
+	    //Refresh the Window after Updates
+	    window.onunload = refreshParent;
+	    function refreshParent() {
+	        window.opener.location.reload();
+	    }
+	 	// return
+	    return false;
+	  });
+	});
+</script>
+<div style="background-color: #3D88C9; color: #FFF; height: 60px !important; min-height: 10% !important;">
 	<div style="float: left;">
 		<a href="/wsc/"><img alt="Logo" src="/wsc/wscui/images/wsc_logo.png"></a>
 	</div>
@@ -86,7 +95,7 @@ function closeWindow(){
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12" align="center">
-				<form action="../../admin/product/savecategoryname" method="post" onsubmit="closeWindow()">
+				<form action="../../admin/product/savecategoryname" method="post">
 					<p>&nbsp;</p>
 					<strong>Enter New Category : </strong>	
 					<input type="text" class="form-control" name="categoryName" id="categoryName" required="true" 
