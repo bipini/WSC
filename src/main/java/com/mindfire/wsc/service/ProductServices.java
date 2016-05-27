@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ import com.mindfire.wsc.repositories.ProductsRepository;
  */
 @Service
 public class ProductServices {
+	
+	private static final Logger log = Logger.getLogger(ProductServices.class);
 	
 	@Autowired
 	private ProductRepository prepo;
@@ -123,6 +126,7 @@ public class ProductServices {
 				
 		Set<ProductsDTO> productsDtos = new HashSet<ProductsDTO>();
 		
+		//Get all products using Category Id
 		Set<Products> allproducts = pCategory.getProducts();
 		
 		for(Products products : allproducts ){			
@@ -131,6 +135,7 @@ public class ProductServices {
 		
 		return productsDtos;	
 	}
+		
 	
 	/*
 	 * Convert Products Domain to Products DTO
@@ -144,16 +149,20 @@ public class ProductServices {
 			productDto.setCostprice(products.getCostprice());
 			productDto.setProductname(products.getProductname());
 			productDto.setSellingprice(products.getSellingprice());
-			productDto.setQuantity(products.getQuantity());
+			productDto.setQuantity(products.getQuantity());				
 		}
 		return productDto;
 	}
 	
 	//Get the Products detail using ProductNumber
-	public ProductsDTO modifyProductNumber(String productNumber) {
+	public ProductsDTO modifyProductNumber(String productNumber,int categoryId) {
 		
 		// Call to ProductsRepository to get Products Detail
 		ProductsDTO productsDto = convertProductsDomainToProductsDto(productsrepo.findByProductNumber(productNumber));
+		
+		//Add the Category Id to Products DTO object
+		productsDto.setCategoryId(categoryId);
+		
 		return productsDto;
 	}
 	
@@ -177,9 +186,14 @@ public class ProductServices {
 		Products products = convertProductsDtoToProductsDomain(pdto);
 		Products existingproduct = productsrepo.findByProductNumber(pdto.getProductNumber());
 		
+		log.info("Service Product Number: "+existingproduct.getProductNumber());
+		
+		log.info("Service Category Id: "+pdto.getCategoryId());
+		
 		// Check if it is an existing product, then update it
 		if(existingproduct != null) {
 			products.setProductNumber(existingproduct.getProductNumber());
+			products.setProductCategory(prepo.findByCategoryId(pdto.getCategoryId()));			
 		}
 		
 		// Save the Domain object to Db
@@ -198,6 +212,38 @@ public class ProductServices {
 			product.setSellingprice(pdto.getSellingprice());			
 		}
 		return product;
+	}
+	
+	/*
+	 * Delete the Prodcuts using ProductNumber
+	 */
+	public void deleteProductNumber(String productNumber) {
+		
+		//Get Product Infor using ProductNumber
+		Products product = productsrepo.findByProductNumber(productNumber);
+		
+		//Delete the product
+		if(product != null) {
+			productsrepo.delete(product);
+		}
+		log.info(productNumber+ "Deleted");
+	}
+
+	public void deleteSelectedCategory(int categoryId) {
+		
+		//Get the Product Category object
+		ProductCategory pCategory = prepo.findByCategoryId(categoryId);	
+		
+		//Get all products using Category Id
+		Set<Products> allproducts = pCategory.getProducts();		
+	
+		//Check the Null and Delete the Category
+		if(pCategory != null) {
+			if(allproducts != null) {				
+				productsrepo.delete(allproducts);
+			}
+			prepo.delete(pCategory);
+		}
 	}
 	
 }
