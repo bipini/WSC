@@ -25,5 +25,7 @@ public interface ProductsRepository extends JpaRepository<Products, Long> {
 	
 	//Get the Product Detail Using Product Name
 	public Products findByProductname(String productName);
-		
+	
+	//For Delete Product
+	void delete(Products product);	
 }
