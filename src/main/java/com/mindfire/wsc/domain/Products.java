@@ -5,6 +5,7 @@ package com.mindfire.wsc.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +26,7 @@ public class Products {
 	
 	@Id
     @GeneratedValue
-	@Column(name="productNumber", unique=true, nullable=false)	
+	@Column(name="ProductNumber", unique=true, nullable=false)	
 	private String productNumber;
 		
 	//private int categoryId;
@@ -45,7 +46,7 @@ public class Products {
 	@Column
 	private Date timestamp;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinColumn(name="categoryId")
     private ProductCategory productCategory;
 		
