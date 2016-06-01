@@ -27,8 +27,8 @@
 </head>
 <body>	
 <!-- Header Starts-->
-<link href="/wsc/wscui/css/style.css" rel="stylesheet">
-<link rel="stylesheet" href="/wsc/wscui/css/bootstrap.min.css">
+<link href="/wsc/wscui/css/style.css" rel="stylesheet" />
+<link rel="stylesheet" href="/wsc/wscui/css/bootstrap.min.css" />
 
 <script src="/wsc/wscui/js/bootstrap.min.js"></script>
 <%
