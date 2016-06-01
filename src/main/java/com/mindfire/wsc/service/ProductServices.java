@@ -62,6 +62,7 @@ public class ProductServices {
 		if(existingCategory != null) {
 			existingCategory.setAddby(username);
 			existingCategory.setCategoryName(pCategory.getCategoryName());
+			existingCategory.setCategoryId(existingCategory.getCategoryId());
 			prepo.saveAndFlush(existingCategory);
 		} else {
 			// This part is used to add new categories
@@ -244,6 +245,23 @@ public class ProductServices {
 			}
 			prepo.delete(pCategory);
 		}
+	}
+	/*
+	 * This Method is used to validate the Categoryid
+	 * @return ProductCategoryDTO object
+	 */
+	public ProductCategoryDTO editSelectedCategory(int categoryId) {
+		
+		ProductCategoryDTO pdto = null;
+		
+		//Get the Product Category object
+		if(categoryId > 0) {
+			ProductCategory pCategory = prepo.findByCategoryId(categoryId);
+			if(pCategory != null) {				
+				pdto = convertProductCategoryDomainToProductCategoryDto(pCategory);
+			}
+		}
+		return pdto;
 	}
 	
 }
