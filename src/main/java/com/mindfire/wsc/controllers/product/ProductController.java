@@ -290,10 +290,42 @@ public class ProductController {
 		}	
 		
 		mmap.addAttribute("msg", "Category Deleted Successfully");
-		//Delete Product category
-		productServices.deleteSelectedCategory(categoryDTO.getCategoryId());
 		
+		if(categoryDTO.getCategoryId() > 0) { 
+			//Delete Product category
+			productServices.deleteSelectedCategory(categoryDTO.getCategoryId());
+		}
+		
+		//Return
 		return "DeleteProductCategory";
 	}
-
+	
+	/**
+	 * Used to Delete Products Category along with related products
+	 * @Session Check for Admin
+	 * @return to AdminHome page
+	 */
+	@RequestMapping(value = "/editdeleteproductcategory", method = RequestMethod.POST, params="EditCategory")
+	public String editProductCategory(ProductCategoryDTO categoryDTO,ModelMap mmap, HttpSession session) {
+		ProductCategoryDTO pdto = null;
+		logger.info("Category Id "+ categoryDTO.getCategoryId() +" Found");
+		
+		//Check Session for Admin
+		UserDTO udto = (UserDTO)session.getAttribute("userSession");
+		if(!("admin").equals(udto.getRole())) {
+			logger.info("Admin Session Not Valid");
+			return ("redirect:/login");
+		}	
+				
+		if(categoryDTO.getCategoryId() > 0) { 
+			//Delete Product category
+			pdto = productServices.editSelectedCategory(categoryDTO.getCategoryId());
+		}
+		
+		mmap.addAttribute("msg", pdto);
+		
+		//Return
+		return "addcategory";
+	}
+	
 }
