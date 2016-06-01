@@ -30,23 +30,32 @@
 </head>
 <body>
 <script>
-// wait for the DOM to be loaded 
-$(document).ready(function() {		    
-		var msg = "${msg}";		
-		if(!("").equals(msg)) {
-		alert(msg);
-	    // close window
-	    window.close();	    
-	    
-	    //Refresh the Window after Updates
-	    window.onunload = refreshParent;
-	    function refreshParent() {
-	        window.opener.location.reload();
-	    }
-	 	// return
-	    return false;
-		}
-	});
+var msg = '${msg}';
+if(msg.indexOf("Category Deleted Successfully") > -1) {
+window.onunload = refreshParent;
+	function refreshParent() {
+	    window.opener.location.reload();
+	    window.close();
+	}
+}
+$(document).ready(function () {
+    $('#myForm').submit(function(){
+        if($('#categoryId').val() == 'NONE') {
+    		alert("Select Any value");
+    		return false;
+    	}        
+    });
+    
+    /*$('#editbtn').click(function(){
+	    $('#categoryId').change(function(){
+	    	if($('#categoryId').val() != 'NONE') {
+	    		$('.inputs').empty();
+	    		$('<input type="text" class="field" name="CategoryName" value="' + $('#categoryId option:selected').text() + '" />').appendTo('.inputs');
+	    	}
+			return true;
+		});
+    });*/
+});
 </script>
 <div style="background-color: #3D88C9; color: #FFF; height: 60px !important; min-height: 10% !important;">
 	<div style="float: left;">
@@ -73,13 +82,14 @@ $(document).ready(function() {
 					   <c:forEach items="${productCategory}" var="productcategory">		
 					   <option value="${productcategory.categoryId}">${productcategory.categoryName}</option>	
 					   </c:forEach>		 				   
-					</select> 
+					</select>
+					<span class="inputs"></span> 					
 				    <p>&nbsp;</p>
 					<button class="btn btn-primary" type="reset" value="Cancel" onclick="window.open('', '_self', ''); window.close();">Cancel</button>
 					&nbsp;&nbsp;
-					<input id="btn" class="btn btn-warning" type="submit" name="EditCategory" value="Edit" />&nbsp;&nbsp;
-					<input id="btn" class="btn btn-danger" type="submit" name="DeleteCategory" value="Delete" 
-					onClick="return confirm('Are you sure you want to delete this item?'');"/>
+					<input id="editbtn" class="btn btn-warning" type="submit" name="EditCategory" value="Edit" />&nbsp;&nbsp;
+					<input id="deletebtn" class="btn btn-danger" type="submit" name="DeleteCategory" value="Delete" 
+					onclick="return confirm('Are you sure you want to delete this item?');"/>
 										
 				</form>
 			</div>
