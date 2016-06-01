@@ -99,9 +99,12 @@ $(document).ready(function() {
 					<p>&nbsp;</p>
 					<strong>Enter New Category : </strong>	
 					<input type="text" class="form-control" name="categoryName" id="categoryName" required="true" 
-					placeholder="New Category" size="100"  onblur="loadXMLDoc()" />
+					placeholder="New Category" value="${msg.categoryName}" size="100"  onblur="loadXMLDoc()" />					
+					<c:if test="${not empty msg}">
+					<input type="hidden" name="categoryId" id="categoryId" value="${msg.categoryId}" />
+					</c:if>
 					<p><span id="err"></span></p>
-					<button class="btn btn-primary" type="submit" value="AddCategory">Add New Category</button>					
+					<button class="btn btn-primary" type="submit" value="AddCategory">Add/Update Category</button>					
 				</form>
 			</div>
 		</div>
